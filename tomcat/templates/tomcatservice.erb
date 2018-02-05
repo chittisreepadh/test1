@@ -1,0 +1,30 @@
+# Systemd unit file for tomcat 8.x
+[Unit]
+Description=Apache Tomcat server
+Wants=syslog.target network.target
+After=syslog.target network.target
+
+[Service]
+Type=forking
+
+#Environment=JAVA_HOME=/usr/java/latest
+Environment=CATALINA_PID=/run/tomcat.pid
+Environment=CATALINA_HOME=/opt/tomcat
+Environment=CATALINA_BASE=/opt/tomcat
+#Environment='CATALINA_OPTS=-Xms1G -Xmx1G -Djava.net.preferIPv4Stack=true'
+#Environment='JAVA_OPTS=-Djava.awt.headless=true'
+
+ExecStart=/opt/tomcat/bin/startup.sh
+ExecStop=/bin/kill -15 $MAINPID
+PIDFile=/run/tomcat.pid
+SuccessExitStatus=143
+
+User=root
+Group=root
+UMask=0007
+RestartSec=10
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
